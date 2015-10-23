@@ -2,6 +2,7 @@
 
 namespace mobidev\swagger\components\Json;
 
+use mobidev\swagger\components\ActionAdapter;
 use mobidev\swagger\components\Collection;
 use mobidev\swagger\components\Object;
 use yii\rest\Action;
@@ -11,10 +12,13 @@ class Path extends Object
     /** @var string */
     public $name;
 
+    /** @var string */
+    public $path;
+
     /** @var Collection */
     public $verbs;
 
-    /** @var Action */
+    /** @var ActionAdapter */
     private $action;
 
     /**
@@ -23,21 +27,23 @@ class Path extends Object
     public function __construct($action)
     {
         $this->action = $action;
-        $this->name = $this->getPathForAction($action);
         $this->verbs = new Collection();
+        $this->calcNameAndPathForAction();
     }
 
-    /**
-     * @param Action $action
-     * @return string
-     */
-    private function getPathForAction($action)
+    private function calcNameAndPathForAction()
     {
-        $path = '/' . strtolower($action->controller->id) . '/' . $action->id;
-        if ($action instanceof Action) {
-            $path = '/' . strtolower($action->controller->id);
+        $path = '/' . strtolower($this->action->controller->id) . '/' . $this->action->id;
+        $this->name = $path;
+
+        // exclusions for ActiveController actions
+        if ($this->action->isActiveAction()) {
+            $path = '/' . strtolower($this->action->controller->id);
+            if (in_array($this->action->id, ['view', 'delete', 'update'])) {
+                $path .= '/{id}';
+            }
         }
-        return $path;
+        $this->path = $path;
     }
 
     /**
@@ -65,6 +71,6 @@ class Path extends Object
      */
     protected function generateId()
     {
-        $this->id = md5($this->name);
+        $this->id = md5($this->name . $this->path);
     }
 }
