@@ -5,7 +5,7 @@ Yii2 extension for API Documentation generation using Swagger http://swagger.io
 Installation
 ------------
 
-1. Add package repository to composer.json:
+Add package repository to composer.json:
 ```
     "repositories": [
         {
@@ -14,14 +14,16 @@ Installation
         }
     ],
 ```
-2. Run command:
+
+Run command:
 ```
 composer require "mobidev/yii2-swagger" "dev-master"
 ```
 
 Usage
 -----
-1. Add module settings to console config:
+
+Add module settings to console config:
 ```php
 return [
     'bootstrap' => ['gii', 'swagger'],
@@ -38,7 +40,8 @@ return [
     ],
 ];
 ```
-2. Run command for generating json document:
+
+Run command for generating json document:
 ```
 ./yii swagger/generate/json
 ```
