@@ -1,0 +1,27 @@
+{
+    "name": "mobidev/yii2-swagger",
+    "description": "Extension gives ability to generate API documentation in the swagger format",
+    "type": "yii2-extension",
+    "keywords": ["yii2", "extension", "swagger"],
+    "license": "Mobidev License",
+    "authors": [
+        {
+            "name": "Mobidev corp.",
+            "email": "admin@mobidev.biz"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "2.0.*",
+        "zendframework/zend-code" : "2.5.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "mobidev\\swagger\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
+}
