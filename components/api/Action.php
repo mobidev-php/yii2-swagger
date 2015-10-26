@@ -16,6 +16,9 @@ class Action extends \yii\base\Action
     /** @var string */
     public $modelClass;
 
+    /** @var string  */
+    public $scenario = Model::SCENARIO_DEFAULT;
+
     public $errors = [];
 
     /**
@@ -90,6 +93,7 @@ class Action extends \yii\base\Action
         } else {
             $this->model = new $this->modelClass();
         }
+        $this->model->scenario = $this->scenario;
         return $this->model;
     }
 
