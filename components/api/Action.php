@@ -113,7 +113,7 @@ class Action extends \yii\base\Action
         if ($this->loadAndValidateRequest()) {
             return parent::runWithParams($params);
         }
-        return Response::fail(400, $this->model->getErrors());
+        throw new DataValidationHttpException($this->model->getErrors());
     }
 
     /**
