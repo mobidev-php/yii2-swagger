@@ -3,6 +3,7 @@
 namespace mobidev\swagger\components\Json;
 
 use mobidev\swagger\components\Collection;
+use mobidev\swagger\components\PathCollection;
 use mobidev\swagger\Module;
 use yii\rest\Action;
 use yii\rest\ActiveController;
@@ -28,7 +29,7 @@ class Document
     function __construct()
     {
         $this->tags = new Collection();
-        $this->paths = new Collection();
+        $this->paths = new PathCollection();
         $this->definitions = new Collection();
         $this->module = Yii::$app->controller->module;
     }

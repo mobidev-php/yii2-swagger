@@ -1,43 +1,29 @@
-Swagger Extension
+Yii2 Swagger Extension
 =================
-Extension give ability to generate API documentation in swagger format
+Yii2 extension for API Documentation generation using Swagger http://swagger.io
 
 Installation
 ------------
 
-1. Add package repository to composer.json:
+Add package repository to composer.json:
 ```
     "repositories": [
         {
-            "type": "package",
-            "package": {
-                "name": "mobidev/yii2-swagger",
-                "version": "dev-master",
-                "source": {
-                    "url": "git@gitlab.mobidev.biz:web/yii2-swagger.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
+            "type": "vcs",
+            "url": "https://github.com/mobidev-php/yii2-swagger.git"
         }
     ],
 ```
-2. Add autoload to composer.json:
-```
-    "autoload": {
-        "psr-4": {
-            "mobidev\\swagger\\": "vendor/mobidev/yii2-swagger"
-        }
-    },
-```
-3. Run command:
+
+Run command:
 ```
 composer require "mobidev/yii2-swagger" "dev-master"
 ```
 
 Usage
 -----
-1. Add module settings to console config:
+
+Add module settings to console config:
 ```php
 return [
     'bootstrap' => ['gii', 'swagger'],
@@ -54,7 +40,8 @@ return [
     ],
 ];
 ```
-2. Run command for generating json document:
+
+Run command for generating json document:
 ```
 ./yii swagger/generate/json
 ```

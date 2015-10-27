@@ -171,15 +171,17 @@ class Verb extends Object
      */
     private function getRulesForActiveAction($action)
     {
-        if (isset($action->scenario)) {
+        $rules = [];
+        if (in_array($action->id, ['create', 'update'])) {
             $model = $action->controller->modelClass;
             /** @var Model $model */
-            $model = new $model(['scenario' => $action->scenario]);
-            return $model->rules();
+            $rules = (new $model())->rules();
         }
-        return [
-            ['id', 'integer']
-        ];
+
+        if (in_array($action->id, ['view', 'delete', 'update'])) {
+            $rules[] = ['id', 'integer', 'path'];
+        }
+        return $rules;
     }
 
     /**

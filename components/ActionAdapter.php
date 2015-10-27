@@ -86,4 +86,9 @@ class ActionAdapter
         return $this->action->$property;
     }
 
+    public function isActiveAction()
+    {
+        return $this->action instanceof \yii\rest\Action;
+    }
+
 }

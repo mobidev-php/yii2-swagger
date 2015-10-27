@@ -65,6 +65,18 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
+     * @param \mobidev\swagger\components\Object[] $objects
+     * @return $this
+     */
+    public function addArray($objects)
+    {
+        foreach ($objects as $object) {
+            $this->add($object);
+        }
+        return $this;
+    }
+
+    /**
      * @param \mobidev\swagger\components\Object $object
      * @return $this
      */
