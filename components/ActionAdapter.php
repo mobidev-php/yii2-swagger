@@ -3,6 +3,7 @@
 namespace mobidev\swagger\components;
 
 use yii\base\Action;
+use yii\base\Model;
 use Zend\Code\Reflection\DocBlockReflection;
 
 class ActionAdapter
@@ -35,6 +36,14 @@ class ActionAdapter
             return $this->createRulesFromPhpdoc();
         }
         return [];
+    }
+
+    /**
+     * @return string
+     */
+    public function getScenario()
+    {
+        return isset($this->action->scenario) ? $this->action->scenario : Model::SCENARIO_DEFAULT;
     }
 
     /**
@@ -86,6 +95,9 @@ class ActionAdapter
         return $this->action->$property;
     }
 
+    /**
+     * @return bool
+     */
     public function isActiveAction()
     {
         return $this->action instanceof \yii\rest\Action;

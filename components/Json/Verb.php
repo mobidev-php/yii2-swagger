@@ -152,7 +152,7 @@ class Verb extends Object
 
 
     /**
-     * @return string|array
+     * @return array
      */
     private function getRulesForAction()
     {
@@ -160,9 +160,21 @@ class Verb extends Object
             return $this->getRulesForActiveAction($this->action);
         }
         if (!method_exists($this->action, 'rules')) {
-            return '';
+            return [];
         }
-        return $this->action->rules();
+        $rules = $this->action->rules();
+        $scenario = $this->action->getScenario();
+        // filter rules according to selected scenario
+        $rules = array_values(array_filter($rules, function ($rule) use ($scenario) {
+            if (!array_key_exists('on', $rule)) {
+                return true;
+            }
+            if (!array_key_exists('on', $rule)) {
+                return false;
+            }
+            return $rule['on'] == $scenario;
+        }));
+        return $rules;
     }
 
     /**
