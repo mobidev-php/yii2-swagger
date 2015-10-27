@@ -7,6 +7,7 @@ use mobidev\swagger\components\QueryParamAuthSwagger;
 use yii\base\NotSupportedException;
 use yii\filters\ContentNegotiator;
 use yii\filters\Cors;
+use yii\web\Response;
 
 class Controller extends \yii\rest\Controller
 {

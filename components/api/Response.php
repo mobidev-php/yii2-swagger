@@ -2,44 +2,46 @@
 
 namespace mobidev\swagger\components\api;
 
+use yii\base\Event;
 use yii\helpers\ArrayHelper;
+use Yii;
 
 /**
- * It's a helper for standardization an API responses
+ * Response event handler for standardization an API responses
  * @package mobidev\swagger\components\api
  */
-class Response extends \yii\web\Response
+class Response
 {
-    /**
-     * Returns success response
-     * @param array $data
-     * @return \yii\web\Response
-     */
-    public static function success(array $data = [])
-    {
-        $resp = \Yii::$app->response;
-        $resp->setStatusCode(200);
-        $resp->data = ArrayHelper::merge([
-            'status' => 'ok',
-        ], $data);
-        return $resp;
-    }
+    const STATUS_OK    = 'ok';
+    const STATUS_ERROR = 'error';
 
     /**
-     * Returns fail response
-     * @param integer $code
-     * @param array $data
-     * @return \yii\web\Response
+     * Event handler for Response
+     * @param Event $event
      */
-    public static function fail($code = 400, array $data = [])
+    public static function beforeSend($event)
     {
-        $resp = \Yii::$app->response;
-        $resp->setStatusCode($code);
-        $resp->data = ArrayHelper::merge([
-            'status' => 'error',
-            'message' => static::$httpStatuses[$code],
-        ], $data);
-        return $resp;
+        /** @var \yii\web\Response $response */
+        $response = $event->sender;
+        if ($response->isSuccessful) {
+            $response->data = ArrayHelper::merge([
+                'status' => self::STATUS_OK,
+            ], $response->data);
+        } else {
+            $e = Yii::$app->getErrorHandler()->exception;
+            $message = $e->getMessage();
+            $response->format = \yii\web\Response::FORMAT_JSON;
+            $response->data = [
+                'status' => self::STATUS_ERROR,
+                'code' => $response->getStatusCode(),
+                'message' => !empty($message) ? $message : $response::$httpStatuses[$response->getStatusCode()],
+            ];
+            // Add validation errors to response
+            if ($e instanceof DataValidationHttpException) {
+                $response->data = array_merge($response->data, $e->validationErrors);
+            }
+        }
     }
+
 
 }
