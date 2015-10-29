@@ -26,7 +26,9 @@ class Controller extends \yii\rest\Controller
                 ],
             ],
             'corsFilter' => Cors::className(),
-            'authenticator' => QueryParamAuthSwagger::className(),
+            'authenticator' => [
+                'class' => QueryParamAuthSwagger::className(),
+            ],
         ]);
         return $behaviors;
     }
