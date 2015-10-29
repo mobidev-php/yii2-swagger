@@ -167,10 +167,7 @@ class Verb extends Object
         // filter rules according to selected scenario
         $rules = array_values(array_filter($rules, function ($rule) use ($scenario) {
             if (!array_key_exists('on', $rule)) {
-                return true;
-            }
-            if (!array_key_exists('on', $rule)) {
-                return false;
+                $rule['on'] = Model::SCENARIO_DEFAULT;
             }
             return $rule['on'] == $scenario;
         }));

@@ -31,7 +31,7 @@ class Definition extends Object
     {
         $this->action = $action;
         $this->properties = new Collection();
-        $this->name = str_replace(['-', '_'], '', ucfirst($this->action->id . 'Request'));
+        $this->name = str_replace(['-', '_'], '', ucfirst($this->action->controller->id) . ucfirst($this->action->id . 'Request'));
     }
 
     /**
