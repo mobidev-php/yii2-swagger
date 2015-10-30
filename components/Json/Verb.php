@@ -162,8 +162,8 @@ class Verb extends Object
         if (!method_exists($this->action, 'rules')) {
             return [];
         }
-        $rules = $this->action->rules();
         $scenario = $this->action->getScenario();
+        $rules = $this->action->rules();
         // filter rules according to selected scenario
         $rules = array_values(array_filter($rules, function ($rule) use ($scenario) {
             if (!array_key_exists('on', $rule)) {
@@ -171,6 +171,23 @@ class Verb extends Object
             }
             return $rule['on'] == $scenario;
         }));
+
+        if($this->action->modelClass != 'DynamicModel'){
+            $model = (new $this->action->modelClass(['scenario' => $scenario]));
+            if(isset($model->scenarios()[$scenario])){
+                $scenarioAttributes = $model->scenarios()[$scenario];
+                if(!empty($scenarioAttributes)){
+                    foreach($rules as $key => $rule){
+                        if(is_array($rule[0])){
+                            $rules[$key][0] = array_intersect($rule[0], $scenarioAttributes);
+                            if(empty($rules[$key][0])){
+                                unset($rules[$key]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return $rules;
     }
 
