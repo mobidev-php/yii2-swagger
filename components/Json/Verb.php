@@ -184,6 +184,9 @@ class Verb extends Object
                                 unset($rules[$key]);
                             }
                         }
+                        if(is_string($rule[0]) && !(in_array($rule[0], $scenarioAttributes))){
+                            unset($rules[$key]);
+                        }
                     }
                 }
             }
