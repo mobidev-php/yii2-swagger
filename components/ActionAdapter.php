@@ -89,10 +89,12 @@ class ActionAdapter
      */
     public function __get($property)
     {
-        if (property_exists($this, $property)) {
-            return $this->$property;
-        }
         return $this->action->$property;
+    }
+
+    public function __call($methodName, $arguments)
+    {
+        return $this->action->$methodName(implode(', ', $arguments));
     }
 
     /**

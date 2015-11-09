@@ -14,7 +14,7 @@ class Action extends \yii\base\Action
     public $model;
 
     /** @var string */
-    public $modelClass;
+    public $modelClass = 'yii\base\DynamicModel';
 
     /** @var string  */
     public $scenario = Model::SCENARIO_DEFAULT;
@@ -53,7 +53,7 @@ class Action extends \yii\base\Action
      */
     public function rules()
     {
-        if ($this->modelClass == 'DynamicModel') {
+        if ($this->modelClass == 'yii\base\DynamicModel') {
             throw new Exception('You must redefine rules() method in your Action if you use DynamicModel as modelClass');
         }
         if ($this->createModel()) {
@@ -76,7 +76,7 @@ class Action extends \yii\base\Action
             throw new Exception("modelClass should be defined");
         }
 
-        if ($this->modelClass == 'DynamicModel') {
+        if ($this->modelClass == 'yii\base\DynamicModel') {
             $attributes = $this->dynamicModelAttributes();
             if (empty($attributes)) {
                 throw new Exception("You must specify attributes if you use DynamicModel as an Action model");

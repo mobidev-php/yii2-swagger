@@ -100,6 +100,22 @@ class Verb extends Object
         }
 
         $parameters = [];
+        if ($this->action->hasMethod('run')) {
+            $reflector = new \ReflectionClass($this->action->className());
+            $reflectionParameters = $reflector->getMethod('run')->getParameters();
+            foreach($reflectionParameters as $reflectionParameter){
+                $parameters[$reflectionParameter->name] = [
+                    'name' => $reflectionParameter->name,
+                    'in' => 'path',
+                    'description' => $reflectionParameter->name,
+                    'type' => 'string',
+                ];
+                if(!$reflectionParameter->isOptional()){
+                    $parameters[$reflectionParameter->name]['required'] = true;
+                }
+            }
+        }
+
         foreach ($rules as $rule) {
             $rule[0] = is_array($rule[0]) ? $rule[0] : [$rule[0]];
             foreach ($rule[0] as $field) {
@@ -159,38 +175,22 @@ class Verb extends Object
         if ($this->action->controller instanceof ActiveController) {
             return $this->getRulesForActiveAction($this->action);
         }
-        if (!method_exists($this->action, 'rules')) {
-            return [];
-        }
         $scenario = $this->action->getScenario();
         $rules = $this->action->rules();
-        // filter rules according to selected scenario
-        $rules = array_values(array_filter($rules, function ($rule) use ($scenario) {
-            if (!array_key_exists('on', $rule)) {
-                return true;
-            }
-            return $rule['on'] == $scenario;
-        }));
-
-        if($this->action->modelClass != 'DynamicModel'){
-            $model = (new $this->action->modelClass(['scenario' => $scenario]));
-            if(isset($model->scenarios()[$scenario])){
-                $scenarioAttributes = $model->scenarios()[$scenario];
-                if(!empty($scenarioAttributes)){
-                    foreach($rules as $key => $rule){
-                        if(is_array($rule[0])){
-                            $rules[$key][0] = array_intersect($rule[0], $scenarioAttributes);
-                            if(empty($rules[$key][0])){
-                                unset($rules[$key]);
-                            }
-                        }
-                        if(is_string($rule[0]) && !(in_array($rule[0], $scenarioAttributes))){
-                            unset($rules[$key]);
-                        }
-                    }
+        $model = (new $this->action->modelClass(['scenario' => $scenario]));
+        $scenarioAttributes = isset($model->scenarios()[$scenario])?$model->scenarios()[$scenario]:[];
+        foreach($rules as $key => $rule){
+            if(is_array($rule[0])){
+                $rules[$key][0] = array_intersect($rule[0], $scenarioAttributes);
+                if(empty($rules[$key][0])){
+                    unset($rules[$key]);
                 }
             }
+            if(is_string($rule[0]) && !(in_array($rule[0], $scenarioAttributes))){
+                unset($rules[$key]);
+            }
         }
+
         return $rules;
     }
 
