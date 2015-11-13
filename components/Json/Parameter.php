@@ -2,10 +2,10 @@
 
 namespace mobidev\swagger\components\Json;
 
-use mobidev\swagger\components\Object;
+use mobidev\swagger\components\EntityObject;
 use yii\base\ErrorException;
 
-class Parameter extends Object
+class Parameter extends EntityObject
 {
     public $name;
     public $in;

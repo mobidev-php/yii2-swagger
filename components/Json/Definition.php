@@ -3,10 +3,10 @@
 namespace mobidev\swagger\components\Json;
 
 use mobidev\swagger\components\Collection;
-use mobidev\swagger\components\Object;
+use mobidev\swagger\components\EntityObject;
 use yii\rest\Action;
 
-class Definition extends Object
+class Definition extends EntityObject
 {
     /** @var string */
     public $name;

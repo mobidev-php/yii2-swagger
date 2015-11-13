@@ -3,7 +3,7 @@
 namespace mobidev\swagger\components\Json;
 
 use mobidev\swagger\components\Collection;
-use mobidev\swagger\components\Object;
+use mobidev\swagger\components\EntityObject;
 use mobidev\swagger\Module;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
@@ -11,7 +11,7 @@ use yii\rest\Action;
 use yii\rest\ActiveController;
 use Yii;
 
-class Verb extends Object
+class Verb extends EntityObject
 {
     /** @var string */
     public $name;

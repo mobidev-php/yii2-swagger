@@ -2,7 +2,7 @@
 
 namespace mobidev\swagger\components;
 
-use mobidev\swagger\components\Object;
+use mobidev\swagger\components\EntityObject;
 
 class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
 {
@@ -65,7 +65,7 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param \mobidev\swagger\components\Object[] $objects
+     * @param \mobidev\swagger\components\EntityObject[] $objects
      * @return $this
      */
     public function addArray($objects)
@@ -77,10 +77,10 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param \mobidev\swagger\components\Object $object
+     * @param \mobidev\swagger\components\EntityObject $object
      * @return $this
      */
-    public function add(Object $object)
+    public function add(EntityObject $object)
     {
         $this->items[$object->id] = $object;
         return $this;
@@ -119,9 +119,9 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     }
 
     /**
-     * @param \mobidev\swagger\components\Object $object
+     * @param \mobidev\swagger\components\EntityObject $object
      */
-    public function delete(Object $object)
+    public function delete(EntityObject $object)
     {
         unset($this->items[$object->id]);
     }

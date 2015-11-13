@@ -4,10 +4,10 @@ namespace mobidev\swagger\components\Json;
 
 use mobidev\swagger\components\ActionAdapter;
 use mobidev\swagger\components\Collection;
-use mobidev\swagger\components\Object;
+use mobidev\swagger\components\EntityObject;
 use yii\rest\Action;
 
-class Path extends Object
+class Path extends EntityObject
 {
     /** @var string */
     public $name;
@@ -35,15 +35,22 @@ class Path extends Object
     {
         $path = '/' . strtolower($this->action->controller->id) . '/' . $this->action->id;
         $this->name = $path;
-
-        // exclusions for ActiveController actions
-        if ($this->action->isActiveAction()) {
-            $path = '/' . strtolower($this->action->controller->id);
-            if (in_array($this->action->id, ['view', 'delete', 'update'])) {
-                $path .= '/{id}';
-            }
+        if($this->action->hasMethod('run')){
+            $path = $this->getPathFromStandaloneAction();
         }
         $this->path = $path;
+    }
+
+    private function getPathFromStandaloneAction()
+    {
+        $path = '/' . strtolower($this->action->controller->id).'/'.$this->action->id;
+        $reflector = new \ReflectionClass($this->action->className());
+        $reflectionParameters = $reflector->getMethod('run')->getParameters();
+        foreach($reflectionParameters as $reflectionParameter){
+            $path .= '/{'.$reflectionParameter->name.'}';
+        }
+
+        return $path;
     }
 
     /**
