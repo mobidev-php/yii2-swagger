@@ -58,6 +58,7 @@ class Verb extends EntityObject
         $this->action = $action;
         $this->in = $in;
         $this->description = $this->getDescriptionForAction();
+        $this->responses = $this->getResponsesForAction();
         $this->parameters = new Collection();
         $this->tags = new Collection();
         $this->buildParametersFromRules();
@@ -73,6 +74,19 @@ class Verb extends EntityObject
             return '';
         }
         return $this->action->description();
+    }
+
+    /**
+     * @return string
+     */
+    private function getResponsesForAction()
+    {
+        $responses = $this->action->responses();
+        if($responses){
+            return $responses;
+        }else{
+            return $this->responses;
+        }
     }
 
     /**

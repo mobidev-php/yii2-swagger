@@ -83,6 +83,17 @@ class ActionAdapter
     }
 
     /**
+     * Returns responses for method
+     * @return string
+     */
+    public function responses()
+    {
+        if (method_exists($this->action, 'responses')) {
+            return $this->action->responses();
+        }
+    }
+
+    /**
      * Getter
      * @param string $property
      * @return mixed
