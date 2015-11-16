@@ -124,8 +124,19 @@ class Action extends \yii\base\Action
     {
         $this->model->load(Yii::$app->request->get(), '');
         $this->model->load(Json::decode(Yii::$app->request->getRawBody()), '');
+        $this->loadFiles();
         $this->model->validate();
         return !$this->model->hasErrors();
+    }
+
+    private function loadFiles()
+    {
+        foreach($_FILES as $field => $FILE){
+            if($this->model->hasProperty($field)){
+                $uploadedFile = \yii\web\UploadedFile::getInstanceByName($field);
+                $this->model->{$field} = $uploadedFile;
+            }
+        }
     }
 
 }
