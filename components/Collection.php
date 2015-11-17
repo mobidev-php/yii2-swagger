@@ -149,9 +149,13 @@ class Collection implements \Countable, \IteratorAggregate, \ArrayAccess
     public function set($field, $value, array $excludeValue = [])
     {
         foreach ($this->items as $item) {
+            if($item->in == 'path'){
+                continue;
+            }
             if (in_array($item->$field, $excludeValue)) {
                 continue;
             }
+            $item->required = true;
             $item->$field = $value;
         }
     }

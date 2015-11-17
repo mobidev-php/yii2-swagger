@@ -23,6 +23,11 @@ class Verb extends EntityObject
     public $description;
 
     /** @var array */
+    public $consumes = [
+        "application/json",
+    ];
+
+    /** @var array */
     public $produces = [
         "application/json",
     ];
@@ -159,9 +164,9 @@ class Verb extends EntityObject
             $this->parameters->add($p);
         }
 
-        // if at least one parameter has type file, we can use only FormData request
         if ($this->parameters->find('type', 'file')) {
             $this->in = 'formData';
+            $this->consumes = ['multipart/form-data'];
             $this->parameters->set('in', 'formData', ['header']);
         }
     }
@@ -175,6 +180,7 @@ class Verb extends EntityObject
             'description' => $this->description,
             'parameters' => array_values($this->parameters->toArray()),
             'tags' => $this->tags->toString(),
+            'consumes' => $this->consumes,
             'produces' => $this->produces,
             'responses' => $this->responses,
         ];
