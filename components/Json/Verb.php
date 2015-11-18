@@ -45,6 +45,9 @@ class Verb extends EntityObject
     /** @var Collection */
     public $parameters;
 
+    /** @var bool */
+    protected $isMultipleParameter = false;
+
     /** @var Action */
     private $action;
 
@@ -68,6 +71,16 @@ class Verb extends EntityObject
         $this->tags = new Collection();
         $this->buildParametersFromRules();
         $this->buildDefinitions();
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isMultipleParameter()
+    {
+        $res = $this->isMultipleParameter;
+        $this->isMultipleParameter = false;
+        return $res;
     }
 
     /**
@@ -153,6 +166,7 @@ class Verb extends EntityObject
                 }
                 if (method_exists($this, $method)) {
                     $res = call_user_func([$this, $method], $rule);
+                    $res['isMultiple'] = $this->isMultipleParameter();
                     $parameters[$field] = ArrayHelper::merge($parameters[$field], $res);
                 }
             }
@@ -343,10 +357,14 @@ class Verb extends EntityObject
 
     /**
      * Callback function for @buildParametersFromRules
+     * @param array $rule
      * @return array
      */
-    protected function ruleFile()
+    protected function ruleFile($rule)
     {
+        if (isset($rule['maxFiles']) &&  $rule['maxFiles'] > 1) {
+            $this->isMultipleParameter = true;
+        }
         return ['type' => 'file'];
     }
 

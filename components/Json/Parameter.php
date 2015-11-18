@@ -15,6 +15,7 @@ class Parameter extends EntityObject
     public $items;
     public $collectionFormat;
     public $schema;
+    public $isMultiple = false;
 
     /**
      * @param string $ref
@@ -45,6 +46,19 @@ class Parameter extends EntityObject
             throw new ErrorException("Parameter name should be filled");
         }
         $this->id = md5($this->name);
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $res = parent::toArray();
+        if ($res['isMultiple']) {
+            $res['name'] = $res['name'] . '[]';
+        }
+        unset($res['isMultiple']);
+        return $res;
     }
 
 }
