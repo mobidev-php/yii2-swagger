@@ -59,7 +59,8 @@ class GenerateController extends Controller
         $controllerPath = \Yii::getAlias($this->module->controllerPath);
         $controllerPaths = FileHelper::findFiles($controllerPath, ['only' => ['*Controller.php']]);
         foreach ($controllerPaths as $path) {
-            $filename = end(explode(DIRECTORY_SEPARATOR, $path));
+            $tmp = explode(DIRECTORY_SEPARATOR, $path);
+            $filename = end($tmp);
             $class = substr($filename, 0, -4);
             $id = substr($class, 0, -10);
             $class = $this->getNameSpaceFromFile($path) . '\\' . $class;
