@@ -5,6 +5,7 @@ namespace mobidev\swagger\components\Json;
 use mobidev\swagger\components\Collection;
 use mobidev\swagger\components\EntityObject;
 use mobidev\swagger\Module;
+use yii\base\DynamicModel;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\rest\Action;
@@ -212,19 +213,20 @@ class Verb extends EntityObject
         $scenario = $this->action->getScenario();
         $rules = $this->action->rules();
         $model = (new $this->action->modelClass(['scenario' => $scenario]));
-        $scenarioAttributes = isset($model->scenarios()[$scenario])?$model->scenarios()[$scenario]:[];
-        foreach($rules as $key => $rule){
-            if(is_array($rule[0])){
-                $rules[$key][0] = array_intersect($rule[0], $scenarioAttributes);
-                if(empty($rules[$key][0])){
+        if (!($model instanceof DynamicModel)) {
+            $scenarioAttributes = isset($model->scenarios()[$scenario]) ? $model->scenarios()[$scenario] : [];
+            foreach ($rules as $key => $rule) {
+                if (is_array($rule[0])) {
+                    $rules[$key][0] = array_intersect($rule[0], $scenarioAttributes);
+                    if (empty($rules[$key][0])) {
+                        unset($rules[$key]);
+                    }
+                }
+                if (is_string($rule[0]) && !(in_array($rule[0], $scenarioAttributes))) {
                     unset($rules[$key]);
                 }
             }
-            if(is_string($rule[0]) && !(in_array($rule[0], $scenarioAttributes))){
-                unset($rules[$key]);
-            }
         }
-
         return $rules;
     }
 
