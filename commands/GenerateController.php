@@ -29,7 +29,7 @@ class GenerateController extends Controller
     public function actionJson()
     {
         // workaround for identity absence in console application
-        Yii::$container->set('user', ['class' => User::className(),'identityClass' => 'common\models\User']);
+        Yii::$container->set('user', ['class' => User::className(),'identityClass' => 'mobidev\swagger\MockUser']);
 
         // Document generation
         $doc = new Document();
